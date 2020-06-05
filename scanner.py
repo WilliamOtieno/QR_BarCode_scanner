@@ -1,21 +1,20 @@
-import cv2
-import numpy as np
-from pyzbar.pyzbar import decode
+import cv2  # For computer vision
+import numpy as np  # For handling arrays
+from pyzbar.pyzbar import decode  # For decoding the bar codes
 
-
-cam = cv2.VideoCapture(0)
-cam.set(3, 640)
-cam.set(4, 480)
+cam = cv2.VideoCapture(0)  # Access the default webcam in your system
+cam.set(3, 640)  # Set the width (ID of 3) as 640 pixels
+cam.set(4, 480)  # Set the height (ID of 4) as 480 pixels
 
 while True:
-    success, img = cam.read()
-    for barcode in decode(img):
-        print(barcode.data)
-        myData = barcode.data.decode('utf-8')
-        print(myData)
+    success, img = cam.read()  # Analyse the image
+    for barcode in decode(img):  # Decode the data in a loop
+        print(barcode.data)  # Output the barcode data
+        myData = barcode.data.decode('utf-8')  # Decode the data
+        print(myData)  # Output decoded data
         pts = np.array([barcode.polygon], np.int32)
         pts = pts.reshape((-1, 1, 2))
-        cv2.polylines(img, [pts], True, (255, 0, 255), 5)
+        cv2.polylines(img, [pts], True, (255, 0, 255), 5)  # Draw a lines around the bar code
         pts2 = barcode.rect
         cv2.putText(img, myData, (pts2[0], pts2[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 0, 255), 2)
 
